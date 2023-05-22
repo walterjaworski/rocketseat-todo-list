@@ -29,5 +29,6 @@ export const CounterContainer = styled.span`
   border-radius: 100px;
   font-size: 0.75rem;
   font-weight: 700;
+  margin-left: 0.5rem;
 `;
 
