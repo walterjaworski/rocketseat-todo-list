@@ -14,24 +14,9 @@ import { ToDoList } from "../ToDoList";
 import { TaskType } from "../ToDoCard";
 import { useState } from "react";
 
-const tasks: TaskType[] = [
-  {
-    id: 'ee68d754-89b2-4f4d-81b0-241f05ed764a',
-    content: 'Esta é a primeira task de exemplo. Se desejar, pode excluí-la',
-    checked: false,
-    publishedAt: new Date('2023-05-22 16:00:00'),
-  },
-  {
-    id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
-    content: 'Esta é a segunda task de exemplo. Se desejar, pode excluí-la',
-    checked: true,
-    publishedAt: new Date('2023-05-22 17:00:00'),
-  },
-];
-
 export function App() {
   const uuid = uuidv4();
-  const [tasksList, setTasksList] = useState(tasks);
+  const [tasksList, setTasksList] = useState<TaskType[]>([]);
 
   function handleAddNewTask(value: string) {
     const newTask = {
@@ -44,8 +29,20 @@ export function App() {
     setTasksList([...tasksList, newTask]);
   }
 
-  function handleRemoveTask() {
-    console.log('handleRemoveTask');
+  function toggleCheckTask(id: string) {
+    const updatedList = [...tasksList];
+    const taskToUpdate = updatedList.find((task) => task.id === id);
+
+    if (taskToUpdate) {
+      taskToUpdate.checked = !taskToUpdate.checked;
+    }
+
+    setTasksList(updatedList);
+  }
+
+  function removeTask(id: string) {
+    const filteredTaskList = tasksList.filter((task) => task.id !== id);
+    setTasksList(filteredTaskList);
   }
 
   return (
@@ -58,6 +55,8 @@ export function App() {
         />
         <ToDoList
           list={tasksList}
+          taskToDelete={removeTask}
+          taskToToggleCheck={toggleCheckTask}
         />
       </S.Container>
     </ThemeProvider>

@@ -1,14 +1,26 @@
+import { FormEvent } from 'react';
 import { TaskType, ToDoCard } from '../ToDoCard';
 
 import * as S from './styles';
 
 interface ToDoListProps {
   list: TaskType[],
+  taskToDelete: (id: string) => void,
+  taskToToggleCheck: (id: string) => void,
 }
 
-export function ToDoList({ list }: ToDoListProps) {
+export function ToDoList({ list, taskToDelete, taskToToggleCheck }: ToDoListProps) {
   const totalTaskCounter = list.length;
   const totalTasksFinished = list.filter((task) => task.checked === true).length;
+
+  function handleToggleCheckTask(value: string) {
+    taskToToggleCheck(value);
+  }
+
+  function handleDeleteTask(value: string) {
+    taskToDelete(value)
+  }
+
   return (
     <>
       <S.Header>
@@ -27,7 +39,12 @@ export function ToDoList({ list }: ToDoListProps) {
       </S.Header>
       <main>
         {list.map((task) => (
-          <ToDoCard key={task.id} task={task} />
+          <ToDoCard
+            key={task.id}
+            task={task}
+            onDeleteTask={handleDeleteTask}
+            onToggleCheckTask={handleToggleCheckTask}
+          />
         ))}
       </main>
     </>
